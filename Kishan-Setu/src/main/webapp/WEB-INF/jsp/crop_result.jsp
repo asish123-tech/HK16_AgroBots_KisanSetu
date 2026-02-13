@@ -20,7 +20,7 @@
 
         /* WINNER CARD */
         .winner-card {
-            background: linear-gradient(135deg, #1f5f35 0%, #15803d 100%);
+            background: linear-gradient(135deg, #166534 0%, #15803d 100%);
             color: white; border-radius: 20px; padding: 30px;
             position: relative; overflow: hidden;
             box-shadow: 0 15px 30px rgba(21, 128, 61, 0.2);
@@ -77,7 +77,7 @@
     
     <div class="header-box">
         <h2>Recommended Crops for ${city}</h2>
-        <p>Based on Soil, Water Source, and Today's Weather (${temp}°C)</p>
+        <p>Based on Soil, pH Level, and Today's Weather (${temp}°C)</p>
     </div>
 
     <div class="winner-card">
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <a href="/crop-recommendation" class="btn-home">Check Another Crop</a>
+    <a href="crop_recommendation.jsp" class="btn-home">Check Another Crop</a>
 
 </div>
 

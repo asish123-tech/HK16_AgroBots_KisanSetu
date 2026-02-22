@@ -1,4 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // --- DEMO VALUES (Delete these once your Servlet is connected) ---
+    request.setAttribute("village", "Ramgarh");
+    request.setAttribute("district", "Alwar");
+    request.setAttribute("waterLevel", 12.5); // Depth in meters
+    request.setAttribute("waterStatus", "Semi-Critical");
+    request.setAttribute("trendText", "Decreasing");
+    request.setAttribute("trendIcon", "fa-arrow-trend-down");
+    request.setAttribute("trendColor", "text-danger");
+    request.setAttribute("availabilityText", "Moderate");
+    request.setAttribute("farmerAdvice", "Water levels are dropping. Switch from flood irrigation to drip irrigation. Consider planting Mustard or Pearl Millet (Bajra) instead of high-water crops.");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,14 +26,12 @@
         }
 
         body { 
-            /* Soft Sky to Earth Gradient */
             background: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 100%);
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             color: #1e293b;
         }
 
-        /* Top Navigation Bar style */
         .nav-header {
             background: white;
             padding: 15px 0;
@@ -29,7 +39,6 @@
             margin-bottom: 30px;
         }
 
-        /* Glassmorphism Cards */
         .water-card { 
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -41,10 +50,9 @@
 
         .water-card:hover { transform: translateY(-5px); }
 
-        /* The Depth Gauge Styling */
         .gauge-container { 
             height: 320px; 
-            width: 70px; 
+            width: 75px; 
             background: #cbd5e1; 
             border-radius: 40px; 
             position: relative; 
@@ -59,19 +67,19 @@
             position: absolute; 
             bottom: 0; 
             border-radius: 0 0 40px 40px; 
-            transition: height 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: linear-gradient(to top, #2575fc, #6a11cb);
+            transition: height 1.5s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Animated Bubbles in the water fill */
+        /* Bubble effect */
         .gauge-fill::after {
-            content: " ";
+            content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            background-image: radial-gradient(circle, white 10%, transparent 10%);
+            background-size: 20px 20px;
             opacity: 0.1;
         }
 
@@ -80,17 +88,14 @@
             border-radius: 30px; 
             font-weight: 700; 
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* Highlighted Advice Section */
         .advice-box { 
             background: linear-gradient(to right, #ffffff, #f0f7ff);
             border-left: 6px solid var(--primary-blue); 
             padding: 20px; 
             border-radius: 12px; 
             margin-top: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
 
         .btn-back {
@@ -100,11 +105,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-radius: 12px;
             font-weight: 600;
-        }
-
-        .btn-back:hover {
-            background: #f8fafc;
-            color: var(--primary-blue);
         }
     </style>
 </head>
@@ -116,7 +116,7 @@
             <i class="fas fa-arrow-left me-2"></i> Dashboard
         </a>
         <div class="text-end">
-            <span class="badge bg-primary rounded-pill px-3">Live Data</span>
+            <span class="badge bg-primary rounded-pill px-3">Demo Preview</span>
         </div>
     </div>
 </div>
@@ -130,15 +130,20 @@
     <div class="row g-4 justify-content-center">
         <div class="col-lg-4 col-md-5">
             <div class="card water-card p-4 text-center">
-                <h5 class="text-uppercase text-secondary small fw-bold mb-4">Current Depth Profile</h5>
+                <h5 class="text-uppercase text-secondary small fw-bold mb-4">Well Depth Visual</h5>
                 <div class="gauge-container mb-4">
+                    <%-- 
+                        Logic: 
+                        If waterLevel is 0 (Full), height is 100%. 
+                        If waterLevel is 40 (Dry), height is 0%.
+                    --%>
                     <div class="gauge-fill" 
                          style="height: ${100 - (waterLevel * 2.5)}%; 
-                                background: ${waterLevel < 5 ? 'linear-gradient(to top, #00b09b, #96c93d)' : (waterLevel < 15 ? 'linear-gradient(to top, #f83600, #f9d423)' : 'linear-gradient(to top, #cb2d3e, #ef473a)')};">
+                                background: ${waterLevel < 7 ? 'linear-gradient(to top, #00b09b, #96c93d)' : (waterLevel < 15 ? 'linear-gradient(to top, #f83600, #f9d423)' : 'linear-gradient(to top, #cb2d3e, #ef473a)')};">
                     </div>
                 </div>
-                <h2 class="fw-bold mb-0">${waterLevel}</h2>
-                <p class="text-uppercase small fw-bold text-muted">Meters Below Ground</p>
+                <h2 class="fw-bold mb-0">${waterLevel} m</h2>
+                <p class="text-uppercase small fw-bold text-muted">Below Ground Level</p>
             </div>
         </div>
 
@@ -147,10 +152,10 @@
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div>
                         <h4 class="fw-bold mb-1">Health Summary</h4>
-                        <p class="text-muted small">Based on January 2024 Records</p>
+                        <p class="text-muted small">Updated: January 2024</p>
                     </div>
                     <span class="status-badge 
-                        ${waterLevel < 5 ? 'bg-success text-white' : (waterLevel < 15 ? 'bg-warning text-dark' : 'bg-danger text-white')} shadow-sm">
+                        ${waterLevel < 7 ? 'bg-success text-white' : (waterLevel < 15 ? 'bg-warning text-dark' : 'bg-danger text-white')} shadow-sm">
                         ${waterStatus}
                     </span>
                 </div>
@@ -166,7 +171,7 @@
                     </div>
                     <div class="col-6">
                         <div class="p-3 border rounded-4 bg-light">
-                            <p class="text-muted small mb-1">Pumping Ease</p>
+                            <p class="text-muted small mb-1">Availability</p>
                             <h5 class="text-dark fw-bold m-0">${availabilityText}</h5>
                         </div>
                     </div>
@@ -177,7 +182,7 @@
                         <div class="bg-warning text-white rounded-circle p-2 me-3" style="width:35px; height:35px; display:flex; align-items:center; justify-content:center;">
                             <i class="fas fa-lightbulb"></i>
                         </div>
-                        <h6 class="fw-bold m-0">Action Plan for Farmers:</h6>
+                        <h6 class="fw-bold m-0">Farmer Action Plan:</h6>
                     </div>
                     <p class="lead fs-6 text-dark mb-0" style="line-height: 1.6;">
                         ${farmerAdvice}
@@ -186,7 +191,7 @@
 
                 <div class="mt-auto pt-4">
                     <button class="btn btn-primary w-100 rounded-3 py-2 fw-bold shadow">
-                        <i class="fas fa-chart-line me-2"></i> Analyze Historical Variations
+                        <i class="fas fa-chart-line me-2"></i> View Historical Data
                     </button>
                 </div>
             </div>

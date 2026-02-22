@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+		.scheme-link {
+		    text-decoration: none;
+		    color: inherit;
+		    display: block;
+		}
         /* --- RESET & VARIABLES --- */
         :root {
             --primary-green: #1f5f35;
@@ -306,6 +311,7 @@
             
             <div class="category-label"><i class="fas fa-gift" style="color: #6b7280;"></i> Free Schemes</div>
             <div class="schemes-grid">
+				<a href="https://soilhealth.dac.gov.in/" target="_blank" class="scheme-link">
                 <div class="scheme-card" data-state="all">
                     <div class="scheme-header">
                         <i class="fas fa-flask scheme-icon" style="color: #84cc16;"></i>
@@ -313,6 +319,7 @@
                     </div>
                     <p class="scheme-desc">Free assessment of soil health with expert fertilizer recommendations.</p>
                 </div>
+				</a>
                 <div class="scheme-card" data-state="MH">
                     <div class="scheme-header">
                         <i class="fas fa-tractor scheme-icon" style="color: #16a34a;"></i>

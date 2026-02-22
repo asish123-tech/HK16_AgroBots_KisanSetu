@@ -1,22 +1,17 @@
-
-# Stage 1: Build the WAR using Maven
+# Stage 1: Build
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Stage 2: Use Apache Tomcat to run the WAR
+# Stage 2: Run
 FROM eclipse-temurin:17-jre
-WORKDIR /usr/local/tomcat
+WORKDIR /app
 
-# Remove default Tomcat apps to keep it clean
-RUN rm -rf webapps/*
+# Copy the generated war and rename it to app.war for simplicity
+COPY --from=build /app/target/Kishan-Setu-1.0.war app.war
 
-# COPY your WAR file into the Tomcat webapps directory
-# This renames it to ROOT.war so your app lives at the base URL (/)
-COPY --from=build /app/target/*.war webapps/ROOT.war
-
-# Tomcat runs on 8080 by default
+# Render uses the PORT environment variable, Spring Boot picks this up
 EXPOSE 8080
 
-CMD ["catalina.sh", "run"]
+ENTRYPOINT ["java", "-jar", "app.war"]

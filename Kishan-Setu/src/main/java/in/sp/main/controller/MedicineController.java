@@ -17,6 +17,10 @@ import java.util.Map;
 
 @Controller
 public class MedicineController {
+	 @GetMapping("/water-level")
+	    public String showwaterPage() {
+	        return "water-level";
+	    }
 
     @GetMapping("/medicine_recommendation")
     public String showMedicinePage() {

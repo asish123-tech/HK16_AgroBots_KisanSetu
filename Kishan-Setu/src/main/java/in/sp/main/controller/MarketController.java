@@ -22,6 +22,7 @@ import in.sp.main.service.MarketService;
 @Controller
 @RequestMapping("/market")
 public class MarketController {
+	
 
     @Autowired
     private MarketListingRepository marketRepo;

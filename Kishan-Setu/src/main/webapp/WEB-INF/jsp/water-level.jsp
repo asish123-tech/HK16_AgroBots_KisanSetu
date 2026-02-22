@@ -4,77 +4,196 @@
 <head>
     <title>KisanSetu - Water Intelligence</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --safe-green: #2ecc71;
-            --warning-yellow: #f1c40f;
-            --danger-red: #e74c3c;
+            --primary-blue: #0061ff;
+            --deep-blue: #2575fc;
+            --nature-green: #2ecc71;
+            --earth-brown: #795548;
         }
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .water-card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
-        .gauge-container { height: 300px; width: 60px; background: #e9ecef; border-radius: 30px; position: relative; margin: 0 auto; border: 3px solid #dee2e6; }
-        .gauge-fill { width: 100%; position: absolute; bottom: 0; border-radius: 0 0 30px 30px; transition: height 1s ease-in-out; }
-        .status-badge { padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 1.1rem; }
-        .advice-box { background: #fff; border-left: 5px solid #007bff; padding: 15px; border-radius: 5px; margin-top: 20px; }
+
+        body { 
+            /* Soft Sky to Earth Gradient */
+            background: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            color: #1e293b;
+        }
+
+        /* Top Navigation Bar style */
+        .nav-header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* Glassmorphism Cards */
+        .water-card { 
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            transition: transform 0.3s ease; 
+        }
+
+        .water-card:hover { transform: translateY(-5px); }
+
+        /* The Depth Gauge Styling */
+        .gauge-container { 
+            height: 320px; 
+            width: 70px; 
+            background: #cbd5e1; 
+            border-radius: 40px; 
+            position: relative; 
+            margin: 0 auto; 
+            border: 6px solid #f8fafc;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .gauge-fill { 
+            width: 100%; 
+            position: absolute; 
+            bottom: 0; 
+            border-radius: 0 0 40px 40px; 
+            transition: height 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(to top, #2575fc, #6a11cb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Bubbles in the water fill */
+        .gauge-fill::after {
+            content: " ";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.1;
+        }
+
+        .status-badge { 
+            padding: 10px 24px; 
+            border-radius: 30px; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Highlighted Advice Section */
+        .advice-box { 
+            background: linear-gradient(to right, #ffffff, #f0f7ff);
+            border-left: 6px solid var(--primary-blue); 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-top: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .btn-back {
+            background: #fff;
+            color: #475569;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
     </style>
 </head>
 <body>
 
-<div class="container py-5">
+<div class="nav-header">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="dashboard.jsp" class="btn btn-back px-4 py-2">
+            <i class="fas fa-arrow-left me-2"></i> Dashboard
+        </a>
+        <div class="text-end">
+            <span class="badge bg-primary rounded-pill px-3">Live Data</span>
+        </div>
+    </div>
+</div>
+
+<div class="container">
     <div class="text-center mb-5">
-        <h2 class="fw-bold"><i class="fas fa-droplet text-primary"></i> Ground Water Status</h2>
-        <p class="text-muted">Location: <strong>${village}, ${district}</strong></p>
+        <h2 class="fw-bold"><i class="fas fa-faucet-drip text-primary me-2"></i>Water Level Insights</h2>
+        <p class="text-secondary fs-5">Village: <span class="text-dark fw-semibold">${village}</span> | District: <span class="text-dark fw-semibold">${district}</span></p>
     </div>
 
-    <div class="row g-4">
-        <div class="col-md-4">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-5">
             <div class="card water-card p-4 text-center">
-                <h5>Water Depth</h5>
-                <div class="gauge-container my-3">
+                <h5 class="text-uppercase text-secondary small fw-bold mb-4">Current Depth Profile</h5>
+                <div class="gauge-container mb-4">
                     <div class="gauge-fill" 
-                         style="height: ${100 - (waterLevel * 4)}%; 
-                                background-color: ${waterLevel < 7 ? '#2ecc71' : (waterLevel < 15 ? '#f1c40f' : '#e74c3c')};">
+                         style="height: ${100 - (waterLevel * 2.5)}%; 
+                                background: ${waterLevel < 5 ? 'linear-gradient(to top, #00b09b, #96c93d)' : (waterLevel < 15 ? 'linear-gradient(to top, #f83600, #f9d423)' : 'linear-gradient(to top, #cb2d3e, #ef473a)')};">
                     </div>
                 </div>
-                <h3 class="fw-bold">${waterLevel} <small>meters</small></h3>
-                <p class="text-muted">Below Ground Level</p>
+                <h2 class="fw-bold mb-0">${waterLevel}</h2>
+                <p class="text-uppercase small fw-bold text-muted">Meters Below Ground</p>
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-lg-7 col-md-7">
             <div class="card water-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="m-0">Health Analysis</h4>
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Health Summary</h4>
+                        <p class="text-muted small">Based on January 2024 Records</p>
+                    </div>
                     <span class="status-badge 
-                        ${waterLevel < 7 ? 'bg-success-subtle text-success' : (waterLevel < 15 ? 'bg-warning-subtle text-dark' : 'bg-danger-subtle text-danger')}">
+                        ${waterLevel < 5 ? 'bg-success text-white' : (waterLevel < 15 ? 'bg-warning text-dark' : 'bg-danger text-white')} shadow-sm">
                         ${waterStatus}
                     </span>
                 </div>
 
-                <div class="row text-center mb-4">
-                    <div class="col-6 border-end">
-                        <p class="text-muted mb-1">Last 10 Year Trend</p>
-                        <h5 class="${trendColor}"><i class="fas ${trendIcon}"></i> ${trendText}</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="p-3 border rounded-4 bg-light">
+                            <p class="text-muted small mb-1">30-Year Trend</p>
+                            <h5 class="${trendColor} fw-bold m-0">
+                                <i class="fas ${trendIcon} me-1"></i> ${trendText}
+                            </h5>
+                        </div>
                     </div>
                     <div class="col-6">
-                        <p class="text-muted mb-1">Availability</p>
-                        <h5>${availabilityText}</h5>
+                        <div class="p-3 border rounded-4 bg-light">
+                            <p class="text-muted small mb-1">Pumping Ease</p>
+                            <h5 class="text-dark fw-bold m-0">${availabilityText}</h5>
+                        </div>
                     </div>
                 </div>
 
                 <div class="advice-box">
-                    <h6 class="fw-bold"><i class="fas fa-lightbulb text-warning"></i> Farmer Advice:</h6>
-                    <p class="mb-0">${farmerAdvice}</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="bg-warning text-white rounded-circle p-2 me-3" style="width:35px; height:35px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h6 class="fw-bold m-0">Action Plan for Farmers:</h6>
+                    </div>
+                    <p class="lead fs-6 text-dark mb-0" style="line-height: 1.6;">
+                        ${farmerAdvice}
+                    </p>
                 </div>
 
-                <div class="mt-4">
-                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-history"></i> View Full 30-Year History</button>
+                <div class="mt-auto pt-4">
+                    <button class="btn btn-primary w-100 rounded-3 py-2 fw-bold shadow">
+                        <i class="fas fa-chart-line me-2"></i> Analyze Historical Variations
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
